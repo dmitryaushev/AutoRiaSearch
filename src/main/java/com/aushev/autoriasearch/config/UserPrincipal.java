@@ -1,6 +1,7 @@
 package com.aushev.autoriasearch.config;
 
 import com.aushev.autoriasearch.model.user.User;
+import com.aushev.autoriasearch.model.user.UserStatus;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -38,7 +39,7 @@ public class UserPrincipal implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return this.user.getUserStatus() == UserStatus.ACTIVE;
     }
 
     @Override

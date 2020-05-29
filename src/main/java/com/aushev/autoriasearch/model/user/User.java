@@ -1,5 +1,6 @@
 package com.aushev.autoriasearch.model.user;
 
+import com.aushev.autoriasearch.config.UserExist;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
@@ -48,6 +49,7 @@ public class User {
     }
 
     @Email
+    @UserExist
     @NotEmpty
     public String getEmail() {
         return email;
