@@ -8,7 +8,7 @@
             </button>
             <div class="dropdown-content">
                 <a href="${pageContext.request.contextPath}/user/showUsers">Show all</a>
-                <a href="${pageContext.request.contextPath}/user/showNotActiveUsers">Not active</a>
+                <a href="${pageContext.request.contextPath}/user/notActiveUsers">Not active</a>
                 <a href="${pageContext.request.contextPath}/user/findUser">Find</a>
             </div>
         </div>
