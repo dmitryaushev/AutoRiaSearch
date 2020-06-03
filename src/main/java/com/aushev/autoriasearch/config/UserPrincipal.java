@@ -59,4 +59,8 @@ public class UserPrincipal implements UserDetails {
     public String getName() {
         return String.format("%s %s", this.user.getFirstName(), this.user.getLastName());
     }
+
+    public User getUser() {
+        return this.user;
+    }
 }

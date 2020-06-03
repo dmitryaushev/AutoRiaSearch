@@ -69,7 +69,7 @@ body {
     font: normal 13px Arial, sans-serif;
 }
 
-.zui-table thead th {
+.zui-table th {
     background-color: #DDEFEF;
     border: solid 1px #DDEEEE;
     color: #336B6B;
