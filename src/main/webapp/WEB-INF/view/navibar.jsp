@@ -28,6 +28,7 @@
         <div class="dropdown-content">
             <a href="${pageContext.request.contextPath}/user/get?id=
 <security:authentication property="principal.id"/>">Details</a>
+            <a href="${pageContext.request.contextPath}/search/history">Search history</a>
             <a href="${pageContext.request.contextPath}/logout">Logout</a>
         </div>
     </div>

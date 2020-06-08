@@ -1,5 +1,6 @@
 package com.aushev.autoriasearch.service;
 
+import com.aushev.autoriasearch.dto.SearchDto;
 import com.aushev.autoriasearch.model.Car;
 import com.aushev.autoriasearch.model.search.Search;
 import com.aushev.autoriasearch.model.user.User;
@@ -14,5 +15,7 @@ public interface SearchService {
 
     void saveSearch(Search search, User user);
 
-    List<Search> findSearchListByUser(User user);
+    List<SearchDto> findSearchListByUser(User user);
+
+    List<SearchDto> findLatestRecords(User user);
 }

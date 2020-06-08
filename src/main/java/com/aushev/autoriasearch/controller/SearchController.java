@@ -26,7 +26,7 @@ public class SearchController {
 
     @GetMapping("/searchForm")
     public String showSearchForm(Model model, Authentication authentication) {
-        model.addAttribute("searchList", searchService.findSearchListByUser(getUser(authentication)));
+        model.addAttribute("searchList", searchService.findLatestRecords(getUser(authentication)));
         enumValues(model);
         return "search_form";
     }
@@ -35,7 +35,7 @@ public class SearchController {
     public String search(@ModelAttribute("search") @Valid Search search, BindingResult result, Model model,
                          Authentication authentication) {
         if (result.hasErrors()) {
-            model.addAttribute("searchList", searchService.findSearchListByUser(getUser(authentication)));
+            model.addAttribute("searchList", searchService.findLatestRecords(getUser(authentication)));
             enumValues(model);
             return "search_form";
         }
@@ -50,6 +50,12 @@ public class SearchController {
     public String carDetails(@RequestParam("id") String id, Model model) {
         model.addAttribute("car", searchService.carDetails(id));
         return "car_details";
+    }
+
+    @GetMapping("/history")
+    public String showHistory(Authentication authentication, Model model) {
+        model.addAttribute("searchList", searchService.findSearchListByUser(getUser(authentication)));
+        return "history";
     }
 
     @ModelAttribute("search")

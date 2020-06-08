@@ -41,3 +41,6 @@ create table search
 
 alter table search
     owner to postgres;
+
+alter table search
+    add column date timestamp;

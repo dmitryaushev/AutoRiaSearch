@@ -1,23 +1,25 @@
 package com.aushev.autoriasearch.service;
 
+import com.aushev.autoriasearch.dto.SearchMapper;
+import com.aushev.autoriasearch.dto.SearchDto;
 import com.aushev.autoriasearch.model.Ads;
 import com.aushev.autoriasearch.model.Car;
-import com.aushev.autoriasearch.model.search.Brand;
-import com.aushev.autoriasearch.model.search.City;
-import com.aushev.autoriasearch.model.search.Model;
 import com.aushev.autoriasearch.model.search.Search;
 import com.aushev.autoriasearch.model.user.User;
 import com.aushev.autoriasearch.repository.SearchRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -26,12 +28,18 @@ public class SearchServiceImpl implements SearchService {
 
     private SearchRepository searchRepository;
     private RestTemplate restTemplate;
-    private static final String URL_CAR = "https://developers.ria.com/auto/info?api_key=";
+    private SearchMapper mapper;
+    private static final String URL = "https://developers.ria.com/auto/search?api_key=%s&category_id=1" +
+            "&bodystyle=%s&marka_id=%s&model_id=%s&currency=%s&state=%s&city=%s" +
+            "&type=%s&gearbox=%s&color=%s&top=%s&price_ot=%s&price_do=%s";
+    private static final String URL_CAR = "https://developers.ria.com/auto/info?api_key=%s&auto_id=%s";
     private static final String API_KEY = "u40zPliQ825IX3L5QSqJ4qswnDBEA6KIyueZ0T7y";
 
     @Autowired
-    public SearchServiceImpl(RestTemplateBuilder restTemplateBuilder, SearchRepository searchRepository) {
+    public SearchServiceImpl(RestTemplateBuilder restTemplateBuilder, SearchRepository searchRepository,
+                             SearchMapper mapper) {
         this.searchRepository = searchRepository;
+        this.mapper = mapper;
 
         this.restTemplate = restTemplateBuilder.build();
         List<HttpMessageConverter<?>> messageConverters = new ArrayList<>();
@@ -57,57 +65,10 @@ public class SearchServiceImpl implements SearchService {
         String priceTo = search.getPriceTo();
         String currency = search.getCurrency();
 
+        String url = String.format(URL,
+                API_KEY, bodyStyle, brand, model, currency, state, city, type, gearBox, color, top, priceFrom, priceTo);
 
-        StringBuilder url = new StringBuilder(String.format(
-                "https://developers.ria.com/auto/search?api_key=%s&category_id=1", API_KEY));
-        url.append(String.format("&bodystyle=%s&marka_id=%s&model_id=%s&currency=%s",
-                bodyStyle, brand, model, currency));
-
-        if (!state.isEmpty()) {
-            url.append("&state=");
-            url.append(state);
-        }
-        if (!city.isEmpty()) {
-            if (state.isEmpty()) {
-                state = Arrays.stream(City.values())
-                        .filter(x -> x.getCity().equals(city))
-                        .findAny()
-                        .get()
-                        .getState()
-                        .getState();
-                search.setState(state);
-                url.append("&state=");
-                url.append(state);
-            }
-            url.append("&city=");
-            url.append(city);
-        }
-        if (!type.isEmpty()) {
-            url.append("&type=");
-            url.append(type);
-        }
-        if (!gearBox.isEmpty()) {
-            url.append("&gearbox=");
-            url.append(gearBox);
-        }
-        if (!color.isEmpty()) {
-            url.append("&color=");
-            url.append(color);
-        }
-        if (!top.isEmpty()) {
-            url.append("&top=");
-            url.append(top);
-        }
-        if (!priceFrom.isEmpty()) {
-            url.append("&price_ot=");
-            url.append(priceFrom);
-        }
-        if (!priceTo.isEmpty()) {
-            url.append("&price_do=");
-            url.append(priceTo);
-        }
-
-        Ads ads = restTemplate.getForObject(url.toString(), Ads.class);
+        Ads ads = restTemplate.getForObject(url, Ads.class);
 
         List<Car> cars = new ArrayList<>();
         ads.getResult().getSearch_result().getIds().forEach(id ->
@@ -117,32 +78,31 @@ public class SearchServiceImpl implements SearchService {
 
     @Override
     public Car carDetails(String id) {
-        return restTemplate.getForObject(String.format("%s%s&auto_id=%s", URL_CAR, API_KEY, id), Car.class);
+        return restTemplate.getForObject(String.format(URL_CAR, API_KEY, id), Car.class);
     }
 
 
     @Override
     public void saveSearch(Search search, User user) {
+
         search.setUser(user);
+        search.setDate(LocalDateTime.now().withNano(0));
         searchRepository.save(search);
     }
 
     @Override
-    public List<Search> findSearchListByUser(User user) {
+    public List<SearchDto> findSearchListByUser(User user) {
         List<Search> searchList = searchRepository.findAllByUser(user);
-        searchList.forEach(search -> {
-            String brand = Arrays.stream(Brand.values())
-                    .filter(x -> x.getBrand().equals(search.getBrand()))
-                    .findAny()
-                    .get()
-                    .getTitle();
-            String model = Arrays.stream(Model.values())
-                    .filter(x -> x.getModel().equals(search.getModel()))
-                    .findAny()
-                    .get()
-                    .getTitle();
-            search.setTitle(String.format("%s %s", brand, model));
-        });
-        return searchList;
+        List<SearchDto> searchDtoList = new ArrayList<>();
+        searchList.forEach(search -> searchDtoList.add(mapper.toDto(search)));
+        return searchDtoList;
+    }
+
+    @Override
+    public List<SearchDto> findLatestRecords(User user) {
+        List<Search> searchList = searchRepository.findTop5ByUserOrderByDateDesc(user);
+        List<SearchDto> searchDtoList = new ArrayList<>();
+        searchList.forEach(search -> searchDtoList.add(mapper.toDto(search)));
+        return searchDtoList;
     }
 }

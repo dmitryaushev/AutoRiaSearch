@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "search")
@@ -25,6 +26,7 @@ public class Search {
     private String top;
     private String currency;
     private User user;
+    private LocalDateTime date;
     private String title;
 
 
@@ -144,6 +146,14 @@ public class Search {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public LocalDateTime getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDateTime date) {
+        this.date = date;
     }
 
     @Transient
