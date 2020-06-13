@@ -1,17 +1,16 @@
 package com.aushev.autoriasearch.service;
 
-import com.aushev.autoriasearch.dto.SearchMapper;
 import com.aushev.autoriasearch.dto.SearchDto;
+import com.aushev.autoriasearch.dto.SearchMapper;
 import com.aushev.autoriasearch.model.Ads;
 import com.aushev.autoriasearch.model.Car;
 import com.aushev.autoriasearch.model.search.Search;
 import com.aushev.autoriasearch.model.user.User;
 import com.aushev.autoriasearch.repository.SearchRepository;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -29,6 +28,7 @@ public class SearchServiceImpl implements SearchService {
     private SearchRepository searchRepository;
     private RestTemplate restTemplate;
     private SearchMapper mapper;
+    private Gson gson;
     private static final String URL = "https://developers.ria.com/auto/search?api_key=%s&category_id=1" +
             "&bodystyle=%s&marka_id=%s&model_id=%s&currency=%s&state=%s&city=%s" +
             "&type=%s&gearbox=%s&color=%s&top=%s&price_ot=%s&price_do=%s";
@@ -37,9 +37,10 @@ public class SearchServiceImpl implements SearchService {
 
     @Autowired
     public SearchServiceImpl(RestTemplateBuilder restTemplateBuilder, SearchRepository searchRepository,
-                             SearchMapper mapper) {
+                             SearchMapper mapper, Gson gson) {
         this.searchRepository = searchRepository;
         this.mapper = mapper;
+        this.gson = gson;
 
         this.restTemplate = restTemplateBuilder.build();
         List<HttpMessageConverter<?>> messageConverters = new ArrayList<>();
@@ -78,7 +79,8 @@ public class SearchServiceImpl implements SearchService {
 
     @Override
     public Car carDetails(String id) {
-        return restTemplate.getForObject(String.format(URL_CAR, API_KEY, id), Car.class);
+        JsonNode node = restTemplate.getForObject(String.format(URL_CAR, API_KEY, id), JsonNode.class);
+        return gson.fromJson(node.toString(), Car.class);
     }
 
 

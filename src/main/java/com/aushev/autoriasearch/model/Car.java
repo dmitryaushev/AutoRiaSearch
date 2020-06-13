@@ -1,8 +1,5 @@
 package com.aushev.autoriasearch.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class Car {
 
     private String title;
@@ -69,7 +66,6 @@ public class Car {
         this.photoData = photoData;
     }
 
-    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class AutoData {
 
         private int autoId;
@@ -128,7 +124,6 @@ public class Car {
         }
     }
 
-    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class PhotoData {
 
         private String seoLinkSX;
