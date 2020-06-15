@@ -5,14 +5,15 @@ import com.aushev.autoriasearch.model.Car;
 import com.aushev.autoriasearch.model.Config;
 import com.aushev.autoriasearch.model.search.Search;
 import com.aushev.autoriasearch.model.search.Top;
+import com.aushev.autoriasearch.model.user.NotActiveUsers;
 import com.aushev.autoriasearch.model.user.User;
+import com.aushev.autoriasearch.model.user.UserStatus;
 import com.aushev.autoriasearch.repository.ConfigRepository;
 import com.aushev.autoriasearch.repository.SearchRepository;
 import com.aushev.autoriasearch.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.event.EventListener;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -120,6 +121,25 @@ public class AdminServiceImpl implements AdminService {
         Config existConfig = configRepository.findByTitle(mailingTitle).orElse(defaultMailing());
         existConfig.setValue(config.getValue());
         configRepository.save(existConfig);
+    }
+
+    @Override
+    public List<User> findAllUsers() {
+        return userRepository.findAll();
+    }
+
+    @Override
+    public List<User> findNotActiveUsers() {
+        return userRepository.findAllByUserStatus(UserStatus.NOT_ACTIVE);
+    }
+
+    @Override
+    public void activateUsers(NotActiveUsers users) {
+
+        users.getNotActiveUsers().forEach(user -> {
+            user.setUserStatus(UserStatus.ACTIVE);
+            userRepository.save(user);
+        });
     }
 
     @EventListener(ApplicationReadyEvent.class)

@@ -1,6 +1,7 @@
 package com.aushev.autoriasearch.controller;
 
 import com.aushev.autoriasearch.model.Config;
+import com.aushev.autoriasearch.model.user.NotActiveUsers;
 import com.aushev.autoriasearch.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -36,8 +38,35 @@ public class AdminController {
         return "set_time";
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping("/showUsers")
+    public String showAllUsers(Model model) {
+        model.addAttribute("users", adminService.findAllUsers());
+        return "show_users";
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping("/notActiveUsers")
+    public String showNotActiveUsers(Model model) {
+        model.addAttribute("users", adminService.findNotActiveUsers());
+        return "not_active_users";
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PostMapping("activateUsers")
+    public String activateUsers(@ModelAttribute("notActiveUsers") NotActiveUsers users, Model model) {
+        adminService.activateUsers(users);
+        model.addAttribute("users", adminService.findNotActiveUsers());
+        return "not_active_users";
+    }
+
     @ModelAttribute("config")
     public Config getDefaultTime() {
         return new Config();
+    }
+
+    @ModelAttribute("notActiveUsers")
+    public NotActiveUsers getNotActiveUsers() {
+        return new NotActiveUsers();
     }
 }

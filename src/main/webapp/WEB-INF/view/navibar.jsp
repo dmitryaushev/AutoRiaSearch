@@ -7,9 +7,9 @@
                 <i></i>
             </button>
             <div class="dropdown-content">
-                <a href="${pageContext.request.contextPath}/user/showUsers">Show all</a>
-                <a href="${pageContext.request.contextPath}/user/notActiveUsers">Not active</a>
-                <a href="${pageContext.request.contextPath}/user/findUser">Find</a>
+                <a href="${pageContext.request.contextPath}/admin/showUsers">Show all</a>
+                <a href="${pageContext.request.contextPath}/admin/notActiveUsers">Not active</a>
+                <a href="${pageContext.request.contextPath}/admin/findUser">Find</a>
             </div>
         </div>
     </security:authorize>
