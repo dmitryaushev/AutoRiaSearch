@@ -8,19 +8,19 @@ public enum Color {
     RED("13", "Красный"),
     WHITE("15", "Белый");
 
-    private String color;
-    private String title;
+    private String value;
+    private String name;
 
-    Color(String color, String title) {
-        this.color = color;
-        this.title = title;
+    Color(String value, String name) {
+        this.value = value;
+        this.name = name;
     }
 
-    public String getColor() {
-        return color;
+    public String getValue() {
+        return value;
     }
 
-    public String getTitle() {
-        return title;
+    public String getName() {
+        return name;
     }
 }

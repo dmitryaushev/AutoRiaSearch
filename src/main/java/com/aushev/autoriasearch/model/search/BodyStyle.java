@@ -8,19 +8,19 @@ public enum BodyStyle {
     SUV("5", "Внедорожник"),
     COUPE("6", "Купе");
 
-    private String bodyStyle;
-    private String title;
+    private String value;
+    private String name;
 
-    BodyStyle(String bodyStyle, String title) {
-        this.bodyStyle = bodyStyle;
-        this.title = title;
+    BodyStyle(String value, String name) {
+        this.value = value;
+        this.name = name;
     }
 
-    public String getBodyStyle() {
-        return bodyStyle;
+    public String getValue() {
+        return value;
     }
 
-    public String getTitle() {
-        return title;
+    public String getName() {
+        return name;
     }
 }

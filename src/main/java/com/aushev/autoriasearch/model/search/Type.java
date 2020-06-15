@@ -6,19 +6,19 @@ public enum Type {
     DIESEL("2", "Дизель"),
     ELECTRO("6", "Электро");
 
-    private String type;
-    private String title;
+    private String value;
+    private String name;
 
-    Type(String type, String title) {
-        this.type = type;
-        this.title = title;
+    Type(String value, String name) {
+        this.value = value;
+        this.name = name;
     }
 
-    public String getType() {
-        return type;
+    public String getValue() {
+        return value;
     }
 
-    public String getTitle() {
-        return title;
+    public String getName() {
+        return name;
     }
 }

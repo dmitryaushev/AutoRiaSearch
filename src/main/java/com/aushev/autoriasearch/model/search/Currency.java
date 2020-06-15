@@ -6,27 +6,27 @@ public enum Currency {
     UAH("3", "₴");
 
 
-    private String currency;
-    private String title;
+    private String value;
+    private String name;
 
-    Currency(String currency, String title) {
-        this.currency = currency;
-        this.title = title;
+    Currency(String value, String name) {
+        this.value = value;
+        this.name = name;
     }
 
-    public String getCurrency() {
-        return currency;
+    public String getValue() {
+        return value;
     }
 
-    public void setCurrency(String currency) {
-        this.currency = currency;
+    public void setValue(String value) {
+        this.value = value;
     }
 
-    public String getTitle() {
-        return title;
+    public String getName() {
+        return name;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setName(String name) {
+        this.name = name;
     }
 }

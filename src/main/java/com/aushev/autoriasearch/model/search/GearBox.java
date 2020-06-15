@@ -5,19 +5,19 @@ public enum GearBox {
     MANUAL("1", "Ручная / Механика"),
     AUTOMATIC("2", "Автомат");
 
-    private String gearBox;
-    private String title;
+    private String value;
+    private String name;
 
-    GearBox(String gearBox, String title) {
-        this.gearBox = gearBox;
-        this.title = title;
+    GearBox(String value, String name) {
+        this.value = value;
+        this.name = name;
     }
 
-    public String getGearBox() {
-        return gearBox;
+    public String getValue() {
+        return value;
     }
 
-    public String getTitle() {
-        return title;
+    public String getName() {
+        return name;
     }
 }

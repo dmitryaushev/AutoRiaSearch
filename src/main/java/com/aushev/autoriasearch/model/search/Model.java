@@ -17,19 +17,19 @@ public enum Model {
     ACCORD("262", "Accord"), CIVIC("265", "Civic"), CR_V("269", "CR-V"),
     JAZZ("274", "Jazz"), LEGEND("275", "Legend");
 
-    private String model;
-    private String title;
+    private String value;
+    private String name;
 
-    Model(String model, String title) {
-        this.model = model;
-        this.title = title;
+    Model(String value, String name) {
+        this.value = value;
+        this.name = name;
     }
 
-    public String getModel() {
-        return model;
+    public String getValue() {
+        return value;
     }
 
-    public String getTitle() {
-        return title;
+    public String getName() {
+        return name;
     }
 }

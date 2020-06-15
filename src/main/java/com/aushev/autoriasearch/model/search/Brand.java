@@ -8,19 +8,19 @@ public enum Brand {
     TOYOTA("79", "Toyota"),
     TESLA("2233", "Tesla");
 
-    private String brand;
-    private String title;
+    private String value;
+    private String name;
 
-    Brand(String brand, String title) {
-        this.brand = brand;
-        this.title = title;
+    Brand(String value, String name) {
+        this.value = value;
+        this.name = name;
     }
 
-    public String getBrand() {
-        return brand;
+    public String getValue() {
+        return value;
     }
 
-    public String getTitle() {
-        return title;
+    public String getName() {
+        return name;
     }
 }

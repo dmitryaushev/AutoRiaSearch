@@ -8,19 +8,19 @@ public enum State {
     ODESSA("12", "Одесская"),
     KHERSON("23", "Херсонская");
 
-    private String state;
-    private String title;
+    private String value;
+    private String name;
 
-    State(String state, String title) {
-        this.state = state;
-        this.title = title;
+    State(String value, String name) {
+        this.value = value;
+        this.name = name;
     }
 
-    public String getState() {
-        return state;
+    public String getValue() {
+        return value;
     }
 
-    public String getTitle() {
-        return title;
+    public String getName() {
+        return name;
     }
 }

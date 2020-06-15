@@ -13,27 +13,27 @@ public enum Top {
     MONTH("5", "За месяц"),
     THREE_MONTHS("6", "За 3 месяца");
 
-    private String top;
-    private String title;
+    private String value;
+    private String name;
 
-    Top(String top, String title) {
-        this.top = top;
-        this.title = title;
+    Top(String value, String name) {
+        this.value = value;
+        this.name = name;
     }
 
-    public String getTop() {
-        return top;
+    public String getValue() {
+        return value;
     }
 
-    public void setTop(String top) {
-        this.top = top;
+    public void setValue(String value) {
+        this.value = value;
     }
 
-    public String getTitle() {
-        return title;
+    public String getName() {
+        return name;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setName(String name) {
+        this.name = name;
     }
 }

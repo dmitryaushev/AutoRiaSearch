@@ -1,34 +1,26 @@
 package com.aushev.autoriasearch.model.search;
 
-import java.util.Arrays;
-
 public enum City {
 
-    VINNYTSIA("1", "Винница", State.VINNYTSIA), ZHMERYNKA("27", "Жмеринка", State.VINNYTSIA),
-    LVIV("5", "Львов", State.LVIV), TRUSKAVETS("307", "Трускавец", State.LVIV),
-    ODESSA("12", "Одесса", State.ODESSA), YUZHNE("643", "Южный", State.ODESSA),
-    KIEV("10", "Киев", State.KIEV), BORYSPIL("212", "Борисполь", State.KIEV),
-    KHERSON("23", "Херсон", State.KHERSON), SKADOVSK("487", "Скадовск", State.KHERSON);
+    VINNYTSIA("1", "Винница"), ZHMERYNKA("27", "Жмеринка"),
+    LVIV("5", "Львов"), TRUSKAVETS("307", "Трускавец"),
+    ODESSA("12", "Одесса"), YUZHNE("643", "Южный"),
+    KIEV("10", "Киев"), BORYSPIL("212", "Борисполь"),
+    KHERSON("23", "Херсон"), SKADOVSK("487", "Скадовск");
 
-    private String city;
-    private String title;
-    private State state;
+    private String value;
+    private String name;
 
-    City(String city, String title, State state) {
-        this.city = city;
-        this.title = title;
-        this.state = state;
+    City(String value, String name) {
+        this.value = value;
+        this.name = name;
     }
 
-    public String getCity() {
-        return city;
+    public String getValue() {
+        return value;
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public State getState() {
-        return state;
+    public String getName() {
+        return name;
     }
 }
