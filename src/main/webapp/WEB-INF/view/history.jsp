@@ -18,19 +18,55 @@
             <th>Кузов</th>
             <th>Марка</th>
             <th>Модель</th>
+            <th>Область</th>
+            <th>Город</th>
+            <th>Топливо</th>
+            <th>Коробка передач</th>
+            <th>Цвет</th>
+            <th>Период подачи</th>
+            <th>Цена от</th>
+            <th>Цена до</th>
+            <th>Валюта</th>
             <th>Дата</th>
         </thead>
         <tbody>
         <c:forEach items="${searchList}" var="search">
             <tr>
                 <td>
-                        ${search.bodyStyle.title}
+                        ${search.bodyStyle.name}
                 </td>
                 <td>
-                        ${search.brand.title}
+                        ${search.brand.name}
                 </td>
                 <td>
-                        ${search.model.title}
+                        ${search.model.name}
+                </td>
+                <td>
+                        ${search.state.name}
+                </td>
+                <td>
+                        ${search.city.name}
+                </td>
+                <td>
+                        ${search.type.name}
+                </td>
+                <td>
+                        ${search.gearBox.name}
+                </td>
+                <td>
+                        ${search.color.name}
+                </td>
+                <td>
+                        ${search.top.name}
+                </td>
+                <td>
+                        ${search.priceFrom}
+                </td>
+                <td>
+                        ${search.priceTo}
+                </td>
+                <td>
+                        ${search.currency.name}
                 </td>
                 <td>
                     ${fn:replace(search.date, 'T', " ")}

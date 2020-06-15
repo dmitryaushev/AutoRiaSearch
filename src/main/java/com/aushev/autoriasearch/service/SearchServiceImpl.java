@@ -11,6 +11,10 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -86,7 +90,6 @@ public class SearchServiceImpl implements SearchService {
 
     @Override
     public void saveSearch(Search search, User user) {
-
         search.setUser(user);
         search.setDate(LocalDateTime.now().withNano(0));
         searchRepository.save(search);
@@ -94,7 +97,8 @@ public class SearchServiceImpl implements SearchService {
 
     @Override
     public List<SearchDto> findSearchListByUser(User user) {
-        List<Search> searchList = searchRepository.findAllByUser(user);
+        Pageable pageable = PageRequest.of(0, 50, Sort.by("date").descending());
+        Page<Search> searchList = searchRepository.findAllByUser(user, pageable);
         List<SearchDto> searchDtoList = new ArrayList<>();
         searchList.forEach(search -> searchDtoList.add(mapper.toDto(search)));
         return searchDtoList;

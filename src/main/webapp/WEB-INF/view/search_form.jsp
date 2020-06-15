@@ -16,55 +16,55 @@
             <th>
                 <form:select path="bodyStyle">
                     <form:option value="">Тип кузова</form:option>
-                    <form:options items="${bodyStyle}" itemValue="bodyStyle" itemLabel="title"/>
+                    <form:options items="${bodyStyle}" itemValue="value" itemLabel="name"/>
                 </form:select>
             </th>
             <th>
                 <form:select path="brand">
                     <form:option value="">Марка</form:option>
-                    <form:options items="${brand}" itemValue="brand" itemLabel="title"/>
+                    <form:options items="${brand}" itemValue="value" itemLabel="name"/>
                 </form:select>
             </th>
             <th>
                 <form:select path="model">
                     <form:option value="">Модель</form:option>
-                    <form:options items="${model}" itemValue="model" itemLabel="title"/>
+                    <form:options items="${model}" itemValue="value" itemLabel="name"/>
                 </form:select>
             </th>
             <th>
                 <form:select path="state">
                     <form:option value="">Область</form:option>
-                    <form:options items="${state}" itemValue="state" itemLabel="title"/>
+                    <form:options items="${state}" itemValue="value" itemLabel="name"/>
                 </form:select>
             </th>
             <th>
                 <form:select path="city">
                     <form:option value="">Город</form:option>
-                    <form:options items="${city}" itemValue="city" itemLabel="title"/>
+                    <form:options items="${city}" itemValue="value" itemLabel="name"/>
                 </form:select>
             </th>
             <th>
                 <form:select path="type">
                     <form:option value="">Тип топива</form:option>
-                    <form:options items="${type}" itemValue="type" itemLabel="title"/>
+                    <form:options items="${type}" itemValue="value" itemLabel="name"/>
                 </form:select>
             </th>
             <th>
                 <form:select path="gearBox">
                     <form:option value="">Коробка передач</form:option>
-                    <form:options items="${gearBox}" itemValue="gearBox" itemLabel="title"/>
+                    <form:options items="${gearBox}" itemValue="value" itemLabel="name"/>
                 </form:select>
             </th>
             <th>
                 <form:select path="color">
                     <form:option value="">Цвет</form:option>
-                    <form:options items="${color}" itemValue="color" itemLabel="title"/>
+                    <form:options items="${color}" itemValue="value" itemLabel="name"/>
                 </form:select>
             </th>
             <th>
                 <form:select path="top">
                     <form:option value="">Период подачи</form:option>
-                    <form:options items="${top}" itemValue="top" itemLabel="title"/>
+                    <form:options items="${top}" itemValue="value" itemLabel="name"/>
                 </form:select>
             </th>
             <th>
@@ -76,7 +76,7 @@
                             onchange="validateNumber(this)"/>
             </th>
             <th>
-                <form:select path="currency" items="${currency}" itemValue="currency" itemLabel="title"/>
+                <form:select path="currency" items="${currency}" itemValue="value" itemLabel="name"/>
             </th>
             <th>
                 <form:checkbox path="mailing" value="true" label="Рассылка"/>

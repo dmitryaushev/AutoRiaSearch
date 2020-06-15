@@ -92,7 +92,7 @@ public class AdminServiceImpl implements AdminService {
             StringBuilder text = new StringBuilder("Добрый день!<br><br>По вашим запросам:<br><br>");
             v.forEach(search -> {
 
-                search.setTop(Top.DAY.getTop());
+                search.setTop(Top.DAY.getValue());
                 List<Car> cars = searchService.searchAds(search);
                 text.append(String.format("<b>%s</b> появилось %s новых объявлений: ",
                         mapper.toDto(search).getTitle(), cars.size()));
