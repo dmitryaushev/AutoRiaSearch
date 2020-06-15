@@ -7,9 +7,8 @@ import com.aushev.autoriasearch.model.Car;
 import com.aushev.autoriasearch.model.search.Search;
 import com.aushev.autoriasearch.model.user.User;
 import com.aushev.autoriasearch.repository.SearchRepository;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,7 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.http.converter.json.GsonHttpMessageConverter;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -32,23 +31,20 @@ public class SearchServiceImpl implements SearchService {
     private SearchRepository searchRepository;
     private RestTemplate restTemplate;
     private SearchMapper mapper;
-    private Gson gson;
-    private static final String URL = "https://developers.ria.com/auto/search?api_key=%s&category_id=1" +
-            "&bodystyle=%s&marka_id=%s&model_id=%s&currency=%s&state=%s&city=%s" +
-            "&type=%s&gearbox=%s&color=%s&top=%s&price_ot=%s&price_do=%s";
-    private static final String URL_CAR = "https://developers.ria.com/auto/info?api_key=%s&auto_id=%s";
-    private static final String API_KEY = "u40zPliQ825IX3L5QSqJ4qswnDBEA6KIyueZ0T7y";
+
+    private String url;
+    private String urlCar;
+    private String apiKey;
 
     @Autowired
     public SearchServiceImpl(RestTemplateBuilder restTemplateBuilder, SearchRepository searchRepository,
-                             SearchMapper mapper, Gson gson) {
+                             SearchMapper mapper) {
         this.searchRepository = searchRepository;
         this.mapper = mapper;
-        this.gson = gson;
 
         this.restTemplate = restTemplateBuilder.build();
         List<HttpMessageConverter<?>> messageConverters = new ArrayList<>();
-        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
+        GsonHttpMessageConverter converter = new GsonHttpMessageConverter();
         converter.setSupportedMediaTypes(Collections.singletonList(MediaType.ALL));
         messageConverters.add(converter);
         this.restTemplate.setMessageConverters(messageConverters);
@@ -70,21 +66,19 @@ public class SearchServiceImpl implements SearchService {
         String priceTo = search.getPriceTo();
         String currency = search.getCurrency();
 
-        String url = String.format(URL,
-                API_KEY, bodyStyle, brand, model, currency, state, city, type, gearBox, color, top, priceFrom, priceTo);
+        String requestUrl = String.format(url, apiKey,
+                bodyStyle, brand, model, currency, state, city, type, gearBox, color, top, priceFrom, priceTo);
 
-        Ads ads = restTemplate.getForObject(url, Ads.class);
+        Ads ads = restTemplate.getForObject(requestUrl, Ads.class);
 
         List<Car> cars = new ArrayList<>();
-        ads.getResult().getSearch_result().getIds().forEach(id ->
-                cars.add(carDetails(id)));
+        ads.getResult().getSearch_result().getIds().forEach(id -> cars.add(carDetails(id)));
         return cars;
     }
 
     @Override
     public Car carDetails(String id) {
-        JsonNode node = restTemplate.getForObject(String.format(URL_CAR, API_KEY, id), JsonNode.class);
-        return gson.fromJson(node.toString(), Car.class);
+        return restTemplate.getForObject(String.format(urlCar, apiKey, id), Car.class);
     }
 
 
@@ -110,5 +104,20 @@ public class SearchServiceImpl implements SearchService {
         List<SearchDto> searchDtoList = new ArrayList<>();
         searchList.forEach(search -> searchDtoList.add(mapper.toDto(search)));
         return searchDtoList;
+    }
+
+    @Value("${url}")
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    @Value("${urlCar}")
+    public void setUrlCar(String urlCar) {
+        this.urlCar = urlCar;
+    }
+
+    @Value("${apiKey}")
+    public void setApiKey(String apiKey) {
+        this.apiKey = apiKey;
     }
 }

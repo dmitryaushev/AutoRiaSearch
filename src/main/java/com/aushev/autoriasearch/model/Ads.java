@@ -1,10 +1,7 @@
 package com.aushev.autoriasearch.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import java.util.List;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class Ads {
 
     private Result result;
@@ -17,7 +14,6 @@ public class Ads {
         this.result = result;
     }
 
-    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Result {
 
         private SearchResult search_result;
@@ -31,7 +27,6 @@ public class Ads {
         }
     }
 
-    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class SearchResult {
 
         private List<String> ids;
