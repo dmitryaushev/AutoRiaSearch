@@ -21,4 +21,8 @@ public interface AdminService {
     List<User> findNotActiveUsers();
 
     void activateUsers(NotActiveUsers users);
+
+    void activateUser(int id);
+
+    void deactivateUser(int id);
 }

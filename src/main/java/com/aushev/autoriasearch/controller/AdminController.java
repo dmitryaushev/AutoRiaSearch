@@ -7,10 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/admin")
@@ -58,6 +55,20 @@ public class AdminController {
         adminService.activateUsers(users);
         model.addAttribute("users", adminService.findNotActiveUsers());
         return "not_active_users";
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping("/activate")
+    public String activateUser(@RequestParam("id") int id) {
+        adminService.activateUser(id);
+        return "redirect:/admin/showUsers";
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping("/deactivate")
+    public String deactivateUser(@RequestParam("id") int id) {
+        adminService.deactivateUser(id);
+        return "redirect:/admin/showUsers";
     }
 
     @ModelAttribute("config")

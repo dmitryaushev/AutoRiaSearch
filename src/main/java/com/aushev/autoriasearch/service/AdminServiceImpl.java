@@ -142,6 +142,21 @@ public class AdminServiceImpl implements AdminService {
         });
     }
 
+    @Override
+    public void activateUser(int id) {
+        User user = userRepository.findById(id).get();
+        user.setUserStatus(UserStatus.ACTIVE);
+        userRepository.save(user);
+    }
+
+    @Override
+    public void deactivateUser(int id) {
+        User user = userRepository.findById(id).get();
+        user.setUserStatus(UserStatus.NOT_ACTIVE);
+        searchRepository.deactivateMailing(id);
+        userRepository.save(user);
+    }
+
     @EventListener(ApplicationReadyEvent.class)
     public void startupMailingTime() {
         Config config = configRepository.findByTitle(mailingTitle).orElse(defaultMailing());

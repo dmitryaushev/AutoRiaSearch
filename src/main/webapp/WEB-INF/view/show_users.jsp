@@ -23,8 +23,16 @@
                         ${user.firstName} ${user.lastName}
                 </td>
                 <td>
-                    <a href="${pageContext.request.contextPath}/user/get?id=${user.id}"
-                       class="button" role="button" tabindex="0">Detailed</a>
+                    <c:choose>
+                        <c:when test="${user.userStatus eq 'ACTIVE'}">
+                            <a href="${pageContext.request.contextPath}/admin/deactivate?id=${user.id}"
+                               class="button" role="button" tabindex="0">Deactivate</a>
+                        </c:when>
+                        <c:otherwise>
+                            <a href="${pageContext.request.contextPath}/admin/activate?id=${user.id}"
+                               class="button" role="button" tabindex="0">Activate</a>
+                        </c:otherwise>
+                    </c:choose>
                 </td>
             </tr>
         </c:forEach>
