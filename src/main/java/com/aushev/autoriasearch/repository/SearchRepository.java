@@ -12,4 +12,6 @@ public interface SearchRepository extends JpaRepository<Search, Integer> {
     List<Search> findAllByUser(User user);
 
     List<Search> findTop5ByUserOrderByDateDesc(User user);
+
+    List<Search> findAllByUserAndMailing(User user, boolean mailing);
 }

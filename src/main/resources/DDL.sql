@@ -44,3 +44,16 @@ alter table search
 
 alter table search
     add column date timestamp;
+
+alter table search
+    add column mailing boolean default false;
+
+create table config
+(
+    id serial,
+    title varchar(25),
+    value varchar(25)
+);
+
+alter table config
+    owner to postgres;

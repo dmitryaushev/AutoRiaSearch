@@ -19,6 +19,9 @@
         </button>
         <div class="dropdown-content">
             <a href="${pageContext.request.contextPath}/search/searchForm">Search Form</a>
+            <security:authorize access="hasRole('ROLE_ADMIN')">
+                <a href="${pageContext.request.contextPath}/admin/time">Set Time</a>
+            </security:authorize>
         </div>
     </div>
     <div class="dropdown" style="float: right">

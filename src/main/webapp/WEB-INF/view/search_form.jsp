@@ -79,6 +79,9 @@
                 <form:select path="currency" items="${currency}" itemValue="currency" itemLabel="title"/>
             </th>
             <th>
+                <form:checkbox path="mailing" value="true" label="Рассылка"/>
+            </th>
+            <th>
                 <c:if test="${not empty searchList}">
                     Ваши недавние поиски<br>
                     <c:forEach items="${searchList}" var="search">

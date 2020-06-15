@@ -27,7 +27,7 @@ public class Search {
     private String currency;
     private User user;
     private LocalDateTime date;
-    private String title;
+    private boolean mailing;
 
 
     @Id
@@ -156,12 +156,11 @@ public class Search {
         this.date = date;
     }
 
-    @Transient
-    public String getTitle() {
-        return title;
+    public boolean isMailing() {
+        return mailing;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setMailing(boolean mailing) {
+        this.mailing = mailing;
     }
 }
