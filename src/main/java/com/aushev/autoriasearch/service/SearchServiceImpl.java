@@ -65,9 +65,10 @@ public class SearchServiceImpl implements SearchService {
         String priceFrom = search.getPriceFrom();
         String priceTo = search.getPriceTo();
         String currency = search.getCurrency();
+        String countPage = search.getCountPage();
 
         String requestUrl = String.format(url, apiKey,
-                bodyStyle, brand, model, currency, state, city, type, gearBox, color, top, priceFrom, priceTo);
+                bodyStyle, brand, model, currency, state, city, type, gearBox, color, top, priceFrom, priceTo, countPage);
 
         Ads ads = restTemplate.getForObject(requestUrl, Ads.class);
 

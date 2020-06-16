@@ -42,6 +42,7 @@ public class AdminServiceImpl implements AdminService {
 
     private static final int HOURS = 0;
     private static final int MINUTES = 1;
+    private static final String COUNT_PAGE = "100";
 
     private String mailingTitle;
     private String mailingTime;
@@ -93,12 +94,13 @@ public class AdminServiceImpl implements AdminService {
             v.forEach(search -> {
 
                 search.setTop(Top.DAY.getValue());
+                search.setCountPage(COUNT_PAGE);
                 List<Car> cars = searchService.searchAds(search);
                 text.append(String.format("<b>%s</b> появилось %s новых объявлений: ",
                         mapper.toDto(search).getTitle(), cars.size()));
                 cars.forEach(car ->
-                        text.append(String.format("<a href=\"localhost:8080/search/car?id=%s\">%s %s USD</a>, ",
-                                car.getAutoData().getAutoId(), car.getTitle(), car.getUSD())));
+                        text.append(String.format("<a href=\"https://auto.ria.com%s\">%s %s USD</a>, ",
+                                car.getLinkToView(), car.getTitle(), car.getUSD())));
                 text.append("<br><br>");
             });
             text.append("С уважением,<br><br>Aushev.");
@@ -135,7 +137,6 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public void activateUsers(NotActiveUsers users) {
-
         users.getNotActiveUsers().forEach(user -> {
             user.setUserStatus(UserStatus.ACTIVE);
             userRepository.save(user);

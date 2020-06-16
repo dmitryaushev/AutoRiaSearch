@@ -28,6 +28,7 @@ public class Search {
     private User user;
     private LocalDateTime date;
     private boolean mailing;
+    private String countPage;
 
 
     @Id
@@ -162,5 +163,14 @@ public class Search {
 
     public void setMailing(boolean mailing) {
         this.mailing = mailing;
+    }
+
+    @Transient
+    public String getCountPage() {
+        return countPage;
+    }
+
+    public void setCountPage(String countPage) {
+        this.countPage = countPage;
     }
 }

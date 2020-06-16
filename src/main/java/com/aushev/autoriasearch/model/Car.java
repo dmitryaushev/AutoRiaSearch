@@ -9,6 +9,7 @@ public class Car {
     private int EUR;
     private AutoData autoData;
     private PhotoData photoData;
+    private String linkToView;
 
     public String getTitle() {
         return title;
@@ -64,6 +65,14 @@ public class Car {
 
     public void setPhotoData(PhotoData photoData) {
         this.photoData = photoData;
+    }
+
+    public String getLinkToView() {
+        return linkToView;
+    }
+
+    public void setLinkToView(String linkToView) {
+        this.linkToView = linkToView;
     }
 
     public static class AutoData {

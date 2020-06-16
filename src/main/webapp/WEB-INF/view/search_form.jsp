@@ -79,6 +79,10 @@
                 <form:select path="currency" items="${currency}" itemValue="value" itemLabel="name"/>
             </th>
             <th>
+                <form:input path="countPage" cssStyle="width:70px" placeholder="Количество"
+                            onchange="validateNumber(this)"/>
+            </th>
+            <th>
                 <form:checkbox path="mailing" value="true" label="Рассылка"/>
             </th>
             <th>
