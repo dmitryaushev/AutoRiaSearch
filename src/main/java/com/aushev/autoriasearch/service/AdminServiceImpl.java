@@ -95,7 +95,8 @@ public class AdminServiceImpl implements AdminService {
 
                 search.setTop(Top.DAY.getValue());
                 search.setCountPage(COUNT_PAGE);
-                List<Car> cars = searchService.searchAds(search);
+                String requestUrl = searchService.requestUrl(search);
+                List<Car> cars = searchService.searchAds(requestUrl);
                 text.append(String.format("<b>%s</b> появилось %s новых объявлений: ",
                         mapper.toDto(search).getTitle(), cars.size()));
                 cars.forEach(car ->

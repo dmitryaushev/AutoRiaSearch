@@ -165,5 +165,12 @@
         </tbody>
     </table>
 </c:if>
+<c:if test="${not empty requestUrl}">
+    <form method="post" action="page">
+        <input type="hidden" value="${requestUrl}" name="requestUrl">
+        <input type="submit" class="button" value="Previous" name="prev">
+        <input type="submit" class="button" value="Next" name="next">
+    </form>
+</c:if>
 </body>
 </html>

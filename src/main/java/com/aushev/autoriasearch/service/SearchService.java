@@ -9,13 +9,17 @@ import java.util.List;
 
 public interface SearchService {
 
-    List<Car> searchAds(Search search);
+    List<Car> searchAds(String requestUrl);
 
-    Car carDetails(String id);
+    Car searchCar(String id);
 
     void saveSearch(Search search, User user);
 
     List<SearchDto> findSearchListByUser(User user);
 
     List<SearchDto> findLatestRecords(User user);
+
+    String requestUrl(Search search);
+
+    String requestUrlPage(String requestUrl, String prev, String next);
 }

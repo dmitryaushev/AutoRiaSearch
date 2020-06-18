@@ -24,6 +24,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class SearchServiceImpl implements SearchService {
@@ -35,6 +36,7 @@ public class SearchServiceImpl implements SearchService {
     private String url;
     private String urlCar;
     private String apiKey;
+    private String templateRequestUrl;
 
     @Autowired
     public SearchServiceImpl(RestTemplateBuilder restTemplateBuilder, SearchRepository searchRepository,
@@ -51,34 +53,15 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
-    public List<Car> searchAds(Search search) {
-
-        String bodyStyle = search.getBodyStyle();
-        String brand = search.getBrand();
-        String model = search.getModel();
-        String state = search.getState();
-        String city = search.getCity();
-        String type = search.getType();
-        String gearBox = search.getGearBox();
-        String color = search.getColor();
-        String top = search.getTop();
-        String priceFrom = search.getPriceFrom();
-        String priceTo = search.getPriceTo();
-        String currency = search.getCurrency();
-        String countPage = search.getCountPage();
-
-        String requestUrl = String.format(url, apiKey,
-                bodyStyle, brand, model, currency, state, city, type, gearBox, color, top, priceFrom, priceTo, countPage);
-
-        Ads ads = restTemplate.getForObject(requestUrl, Ads.class);
-
+    public List<Car> searchAds(String requestUrl) {
+        Ads ads = restTemplate.getForObject(String.format("%s%s%s", url, apiKey, requestUrl), Ads.class);
         List<Car> cars = new ArrayList<>();
-        ads.getResult().getSearch_result().getIds().forEach(id -> cars.add(carDetails(id)));
+        ads.getResult().getSearch_result().getIds().forEach(id -> cars.add(searchCar(id)));
         return cars;
     }
 
     @Override
-    public Car carDetails(String id) {
+    public Car searchCar(String id) {
         return restTemplate.getForObject(String.format(urlCar, apiKey, id), Car.class);
     }
 
@@ -107,6 +90,52 @@ public class SearchServiceImpl implements SearchService {
         return searchDtoList;
     }
 
+    @Override
+    public String requestUrl(Search search) {
+
+        String bodyStyle = search.getBodyStyle();
+        String brand = search.getBrand();
+        String model = search.getModel();
+        String state = search.getState();
+        String city = search.getCity();
+        String type = search.getType();
+        String gearBox = search.getGearBox();
+        String color = search.getColor();
+        String top = search.getTop();
+        String priceFrom = search.getPriceFrom();
+        String priceTo = search.getPriceTo();
+        String currency = search.getCurrency();
+        String countPage = search.getCountPage();
+
+        if (countPage.isEmpty()) {
+            countPage = "10";
+        }
+
+        return String.format(templateRequestUrl,
+                bodyStyle, brand, model, currency, state, city, type, gearBox, color, top, priceFrom, priceTo,
+                countPage);
+    }
+
+    @Override
+    public String requestUrlPage(String requestUrl, String prev, String next) {
+
+        int page = Character.getNumericValue(requestUrl.charAt(requestUrl.length() - 1));
+        String requestUrlPage = requestUrl.substring(0, requestUrl.length() - 1);
+
+        if (Objects.nonNull(prev) && page == 0) {
+            return requestUrl;
+        }
+        if (Objects.nonNull(prev)) {
+            page--;
+            requestUrlPage = requestUrlPage + page;
+        }
+        if (Objects.nonNull(next)) {
+            page++;
+            requestUrlPage = requestUrlPage + page;
+        }
+        return requestUrlPage;
+    }
+
     @Value("${url}")
     public void setUrl(String url) {
         this.url = url;
@@ -120,5 +149,10 @@ public class SearchServiceImpl implements SearchService {
     @Value("${apiKey}")
     public void setApiKey(String apiKey) {
         this.apiKey = apiKey;
+    }
+
+    @Value("${templateRequestUrl}")
+    public void setTemplateRequestUrl(String templateRequestUrl) {
+        this.templateRequestUrl = templateRequestUrl;
     }
 }

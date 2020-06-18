@@ -40,7 +40,9 @@ public class SearchController {
             return "search_form";
         }
 
-        model.addAttribute("cars", searchService.searchAds(search));
+        String requestUrl = searchService.requestUrl(search);
+        model.addAttribute("cars", searchService.searchAds(requestUrl));
+        model.addAttribute("requestUrl", requestUrl);
         searchService.saveSearch(search, getUser(authentication));
         enumValues(model);
         return "search_form";
@@ -48,7 +50,7 @@ public class SearchController {
 
     @GetMapping("car")
     public String carDetails(@RequestParam("id") String id, Model model) {
-        model.addAttribute("car", searchService.carDetails(id));
+        model.addAttribute("car", searchService.searchCar(id));
         return "car_details";
     }
 
@@ -56,6 +58,17 @@ public class SearchController {
     public String showHistory(Authentication authentication, Model model) {
         model.addAttribute("searchList", searchService.findSearchListByUser(getUser(authentication)));
         return "history";
+    }
+
+    @PostMapping("/page")
+    public String page(@RequestParam(value = "prev", required = false) String prev,
+                       @RequestParam(value = "next", required = false) String next,
+                       @RequestParam("requestUrl") String url, Model model) {
+        String requestUrlPage = searchService.requestUrlPage(url, prev, next);
+        model.addAttribute("cars", searchService.searchAds(requestUrlPage));
+        model.addAttribute("requestUrl", requestUrlPage);
+        enumValues(model);
+        return "search_form";
     }
 
     @ModelAttribute("search")
