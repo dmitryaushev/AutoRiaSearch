@@ -1,6 +1,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@ taglib uri = "http://java.sun.com/jsp/jstl/functions" prefix = "fn" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 <html>
@@ -69,12 +69,20 @@
                         ${search.currency.name}
                 </td>
                 <td>
-                    ${fn:replace(search.date, 'T', " ")}
+                        ${fn:replace(search.date, 'T', " ")}
                 </td>
             </tr>
         </c:forEach>
         </tbody>
     </table>
 </c:if>
+<form method="get" action="history">
+    <c:if test="${not empty first}">
+        <button type="submit" class="button" value="${first}" name="page">First</button>
+    </c:if>
+    <button type="submit" class="button" value="${prev}" name="page">Prev</button>
+    ${current}
+    <button type="submit" class="button" value="${next}" name="page">Next</button>
+</form>
 </body>
 </html>

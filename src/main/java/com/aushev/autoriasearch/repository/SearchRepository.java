@@ -15,8 +15,8 @@ import java.util.List;
 
 @Repository
 public interface SearchRepository extends JpaRepository<Search, Integer> {
-    
-    Page<Search> findAllByUser(User user, Pageable pageable);
+
+    List<Search> findAllByUser(User user, Pageable pageable);
 
     List<Search> findTop5ByUserOrderByDateDesc(User user);
 

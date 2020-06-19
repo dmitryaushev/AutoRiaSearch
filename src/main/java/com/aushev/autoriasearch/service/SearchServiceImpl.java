@@ -10,10 +10,7 @@ import com.aushev.autoriasearch.repository.SearchRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.GsonHttpMessageConverter;
@@ -21,10 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Service
 public class SearchServiceImpl implements SearchService {
@@ -74,20 +68,24 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
-    public List<SearchDto> findSearchListByUser(User user) {
-        Pageable pageable = PageRequest.of(0, 50, Sort.by("date").descending());
-        Page<Search> searchList = searchRepository.findAllByUser(user, pageable);
+    public List<SearchDto> findSearchListByUser(User user, Pageable pageable) {
+        List<Search> searchList = searchRepository.findAllByUser(user, pageable);
         List<SearchDto> searchDtoList = new ArrayList<>();
         searchList.forEach(search -> searchDtoList.add(mapper.toDto(search)));
         return searchDtoList;
     }
 
     @Override
-    public List<SearchDto> findLatestRecords(User user) {
+    public Map<String, String> findLatestRecords(User user) {
         List<Search> searchList = searchRepository.findTop5ByUserOrderByDateDesc(user);
-        List<SearchDto> searchDtoList = new ArrayList<>();
-        searchList.forEach(search -> searchDtoList.add(mapper.toDto(search)));
-        return searchDtoList;
+        Map<String, String> searchDtoMap = new LinkedHashMap<>();
+        searchList.forEach(search -> {
+            String title = mapper.toDto(search).getTitle();
+            if (!searchDtoMap.containsKey(title)) {
+                searchDtoMap.put(title, requestUrl(search));
+            }
+        });
+        return searchDtoMap;
     }
 
     @Override
@@ -107,7 +105,7 @@ public class SearchServiceImpl implements SearchService {
         String currency = search.getCurrency();
         String countPage = search.getCountPage();
 
-        if (countPage.isEmpty()) {
+        if (Objects.isNull(countPage) || countPage.isEmpty()) {
             countPage = "10";
         }
 

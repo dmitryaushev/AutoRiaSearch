@@ -86,12 +86,6 @@
                 <form:checkbox path="mailing" value="true" label="Рассылка"/>
             </th>
             <th>
-                <c:if test="${not empty searchList}">
-                    Ваши недавние поиски<br>
-                    <c:forEach items="${searchList}" var="search">
-                        ${search.title}<br>
-                    </c:forEach>
-                </c:if>
             </th>
         </tr>
         <tr>
@@ -121,6 +115,17 @@
     <button type="submit" class="button">Поиск</button>
 </form:form>
 
+<form method="post" action="latestRecords">
+    <c:if test="${not empty searchList}">
+        Ваши недавние поиски<br>
+        <c:forEach items="${searchList}" var="search">
+            <c:forEach items="${search.value}" var="value">
+                <button type="submit" class="button" value="${value}" name="requestUrl">${search.key}</button>
+                <br>
+            </c:forEach>
+        </c:forEach>
+    </c:if>
+</form>
 
 <c:if test="${not empty cars}">
     <p></p>

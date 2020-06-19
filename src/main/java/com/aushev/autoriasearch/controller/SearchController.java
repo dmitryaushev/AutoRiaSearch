@@ -5,6 +5,9 @@ import com.aushev.autoriasearch.model.search.*;
 import com.aushev.autoriasearch.model.user.User;
 import com.aushev.autoriasearch.service.SearchService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,6 +21,9 @@ import javax.validation.Valid;
 public class SearchController {
 
     private SearchService searchService;
+
+    private static final int COUNT = 50;
+    private static final String SORT = "date";
 
     @Autowired
     public void setSearchService(SearchService searchService) {
@@ -55,9 +61,23 @@ public class SearchController {
     }
 
     @GetMapping("/history")
-    public String showHistory(Authentication authentication, Model model) {
-        model.addAttribute("searchList", searchService.findSearchListByUser(getUser(authentication)));
+    public String showHistory(Authentication authentication, Model model,
+                              @PageableDefault(size = COUNT, sort = SORT, direction = Sort.Direction.DESC)
+                                      Pageable pageable) {
+        model.addAttribute("current", pageable.getPageNumber() + 1);
+        model.addAttribute("prev", pageable.previousOrFirst().getPageNumber());
+        model.addAttribute("next", pageable.next().getPageNumber());
+        model.addAttribute("searchList",
+                searchService.findSearchListByUser(getUser(authentication), pageable));
         return "history";
+    }
+
+    @PostMapping("/latestRecords")
+    public String latestRecords(@RequestParam("requestUrl") String requestUrl, Model model) {
+        model.addAttribute("cars", searchService.searchAds(requestUrl));
+        model.addAttribute("requestUrl", requestUrl);
+        enumValues(model);
+        return "search_form";
     }
 
     @PostMapping("/page")
@@ -91,7 +111,6 @@ public class SearchController {
 
     private User getUser(Authentication authentication) {
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-        User user = userPrincipal.getUser();
-        return user;
+        return userPrincipal.getUser();
     }
 }
