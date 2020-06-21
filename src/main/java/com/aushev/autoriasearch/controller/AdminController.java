@@ -3,6 +3,7 @@ package com.aushev.autoriasearch.controller;
 import com.aushev.autoriasearch.model.Config;
 import com.aushev.autoriasearch.model.user.NotActiveUsers;
 import com.aushev.autoriasearch.service.AdminService;
+import com.aushev.autoriasearch.service.MailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -14,10 +15,16 @@ import org.springframework.web.bind.annotation.*;
 public class AdminController {
 
     private AdminService adminService;
+    private MailService mailService;
 
     @Autowired
     public void setAdminService(AdminService adminService) {
         this.adminService = adminService;
+    }
+
+    @Autowired
+    public void setMailService(MailService mailService) {
+        this.mailService = mailService;
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -29,8 +36,8 @@ public class AdminController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/setTime")
     public String setTime(@ModelAttribute("config") Config config, Model model) {
-        adminService.setMailingTime(config);
-        adminService.saveMailingTime(config);
+        mailService.setMailingTime(config);
+        mailService.saveMailingTime(config);
         model.addAttribute("message", String.format("Время рассылки - %s", config.getValue()));
         return "set_time";
     }

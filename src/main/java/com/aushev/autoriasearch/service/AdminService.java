@@ -8,14 +8,6 @@ import java.util.List;
 
 public interface AdminService {
 
-    void sendEmail(String subject, String text, String... to);
-
-    void mailing();
-
-    void setMailingTime(Config config);
-
-    void saveMailingTime(Config config);
-
     List<User> findAllUsers();
 
     List<User> findNotActiveUsers();
