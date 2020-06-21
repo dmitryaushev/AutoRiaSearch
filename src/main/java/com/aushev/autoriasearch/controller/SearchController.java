@@ -3,6 +3,7 @@ package com.aushev.autoriasearch.controller;
 import com.aushev.autoriasearch.config.UserPrincipal;
 import com.aushev.autoriasearch.model.search.*;
 import com.aushev.autoriasearch.model.user.User;
+import com.aushev.autoriasearch.service.MailService;
 import com.aushev.autoriasearch.service.SearchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -21,6 +22,7 @@ import javax.validation.Valid;
 public class SearchController {
 
     private SearchService searchService;
+    private MailService mailService;
 
     private static final int COUNT = 50;
     private static final String SORT = "date";
@@ -28,6 +30,11 @@ public class SearchController {
     @Autowired
     public void setSearchService(SearchService searchService) {
         this.searchService = searchService;
+    }
+
+    @Autowired
+    public void setMailService(MailService mailService) {
+        this.mailService = mailService;
     }
 
     @GetMapping("/searchForm")
@@ -64,11 +71,11 @@ public class SearchController {
     public String showHistory(Authentication authentication, Model model,
                               @PageableDefault(size = COUNT, sort = SORT, direction = Sort.Direction.DESC)
                                       Pageable pageable) {
+        model.addAttribute("searchList",
+                searchService.findSearchListByUser(getUser(authentication), pageable));
         model.addAttribute("current", pageable.getPageNumber() + 1);
         model.addAttribute("prev", pageable.previousOrFirst().getPageNumber());
         model.addAttribute("next", pageable.next().getPageNumber());
-        model.addAttribute("searchList",
-                searchService.findSearchListByUser(getUser(authentication), pageable));
         return "history";
     }
 
@@ -89,6 +96,20 @@ public class SearchController {
         model.addAttribute("requestUrl", requestUrlPage);
         enumValues(model);
         return "search_form";
+    }
+
+    @GetMapping("/deactivate")
+    public String deactivateMailing(@RequestParam("id") int id, Authentication authentication) {
+        User user = getUser(authentication);
+        mailService.deactivateMailing(id, user.getId());
+        return "redirect:/search/history";
+    }
+
+    @GetMapping("/activate")
+    public String activateMailing(@RequestParam("id") int id, Authentication authentication) {
+        User user = getUser(authentication);
+        mailService.activateMailing(id, user.getId());
+        return "redirect:/search/history";
     }
 
     @ModelAttribute("search")

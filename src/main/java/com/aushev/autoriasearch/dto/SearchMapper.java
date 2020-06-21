@@ -53,6 +53,7 @@ public class SearchMapper {
                 .get();
         String title = String.format("%s %s", brand.getName(), model.getName());
 
+        searchDto.setId(search.getId());
         searchDto.setBodyStyle(bodyStyle);
         searchDto.setBrand(brand);
         searchDto.setModel(model);
@@ -67,6 +68,7 @@ public class SearchMapper {
         searchDto.setPriceTo(search.getPriceTo());
         searchDto.setDate(search.getDate());
         searchDto.setTitle(title);
+        searchDto.setMailing(search.isMailing());
         return searchDto;
     }
 

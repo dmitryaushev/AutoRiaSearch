@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 
 public class SearchDto {
 
+    private int id;
     private String priceFrom;
     private String priceTo;
     private BodyStyle bodyStyle;
@@ -20,6 +21,16 @@ public class SearchDto {
     private Currency currency;
     private LocalDateTime date;
     private String title;
+    private boolean mailing;
+
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getPriceFrom() {
         return priceFrom;
@@ -131,5 +142,13 @@ public class SearchDto {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public boolean isMailing() {
+        return mailing;
+    }
+
+    public void setMailing(boolean mailing) {
+        this.mailing = mailing;
     }
 }

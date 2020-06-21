@@ -28,6 +28,7 @@
             <th>Цена до</th>
             <th>Валюта</th>
             <th>Дата</th>
+            <th>Рассылка</th>
         </thead>
         <tbody>
         <c:forEach items="${searchList}" var="search">
@@ -71,15 +72,24 @@
                 <td>
                         ${fn:replace(search.date, 'T', " ")}
                 </td>
+                <td>
+                    <c:choose>
+                        <c:when test="${search.mailing eq true}">
+                            <a href="${pageContext.request.contextPath}/search/deactivate?id=${search.id}"
+                               class="button" role="button" tabindex="0">Deactivate</a>
+                        </c:when>
+                        <c:otherwise>
+                            <a href="${pageContext.request.contextPath}/search/activate?id=${search.id}"
+                               class="button" role="button" tabindex="0">Activate</a>
+                        </c:otherwise>
+                    </c:choose>
+                </td>
             </tr>
         </c:forEach>
         </tbody>
     </table>
 </c:if>
 <form method="get" action="history">
-    <c:if test="${not empty first}">
-        <button type="submit" class="button" value="${first}" name="page">First</button>
-    </c:if>
     <button type="submit" class="button" value="${prev}" name="page">Prev</button>
     ${current}
     <button type="submit" class="button" value="${next}" name="page">Next</button>

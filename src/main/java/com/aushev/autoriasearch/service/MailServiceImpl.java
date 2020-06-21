@@ -1,6 +1,7 @@
 package com.aushev.autoriasearch.service;
 
 import com.aushev.autoriasearch.dto.SearchMapper;
+import com.aushev.autoriasearch.exception.SearchException;
 import com.aushev.autoriasearch.model.Car;
 import com.aushev.autoriasearch.model.Config;
 import com.aushev.autoriasearch.model.search.Search;
@@ -74,6 +75,28 @@ public class MailServiceImpl implements MailService {
         Config existConfig = configRepository.findByTitle(mailingTitle).orElse(defaultMailingTime());
         existConfig.setValue(config.getValue());
         configRepository.save(existConfig);
+    }
+
+    @Override
+    public void deactivateMailing(int searchId, int userId) {
+        Search search = searchRepository.findById(searchId).orElseThrow(() ->
+                new SearchException("Друг, что-то ты не то клацнул"));
+        if (search.getUser().getId() != userId) {
+            throw new SearchException("Дружище, видимо, ты кого-то без расслыки хочешь оставить");
+        }
+        search.setMailing(false);
+        searchRepository.save(search);
+    }
+
+    @Override
+    public void activateMailing(int searchId, int userId) {
+        Search search = searchRepository.findById(searchId).orElseThrow(() ->
+                new SearchException("Друг, что-то ты не то клацнул"));
+        if (search.getUser().getId() != userId) {
+            throw new SearchException("Дружище, не стоит за кого-то решать, что ему рассылать");
+        }
+        search.setMailing(true);
+        searchRepository.save(search);
     }
 
     private void mailing() {
