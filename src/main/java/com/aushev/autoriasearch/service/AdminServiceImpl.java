@@ -1,5 +1,6 @@
 package com.aushev.autoriasearch.service;
 
+import com.aushev.autoriasearch.exception.UserNotExistException;
 import com.aushev.autoriasearch.model.user.NotActiveUsers;
 import com.aushev.autoriasearch.model.user.User;
 import com.aushev.autoriasearch.model.user.UserStatus;
@@ -20,6 +21,12 @@ public class AdminServiceImpl implements AdminService {
     public AdminServiceImpl(SearchRepository searchRepository, UserRepository userRepository) {
         this.searchRepository = searchRepository;
         this.userRepository = userRepository;
+    }
+
+    @Override
+    public User findUser(String email) {
+        return userRepository.findByEmail(email).orElseThrow(() ->
+                new UserNotExistException(String.format("User with email %s not exist", email)));
     }
 
     @Override

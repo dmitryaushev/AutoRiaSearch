@@ -1,12 +1,13 @@
 package com.aushev.autoriasearch.service;
 
-import com.aushev.autoriasearch.model.Config;
 import com.aushev.autoriasearch.model.user.NotActiveUsers;
 import com.aushev.autoriasearch.model.user.User;
 
 import java.util.List;
 
 public interface AdminService {
+
+    User findUser(String email);
 
     List<User> findAllUsers();
 

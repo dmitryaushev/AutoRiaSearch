@@ -1,5 +1,6 @@
 package com.aushev.autoriasearch.controller;
 
+import com.aushev.autoriasearch.exception.UserNotExistException;
 import com.aushev.autoriasearch.model.Config;
 import com.aushev.autoriasearch.model.user.NotActiveUsers;
 import com.aushev.autoriasearch.service.AdminService;
@@ -9,6 +10,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Collections;
 
 @Controller
 @RequestMapping("/admin")
@@ -40,6 +43,24 @@ public class AdminController {
         mailService.saveMailingTime(config);
         model.addAttribute("message", String.format("Время рассылки - %s", config.getValue()));
         return "set_time";
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping("/findUser")
+    public String showFindUserPage() {
+        return "find_user";
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping("/find")
+    public String findUser(@RequestParam("email") String email, Model model) {
+        try {
+            model.addAttribute("users", Collections.singletonList(adminService.findUser(email)));
+            return "show_users";
+        } catch (UserNotExistException e) {
+            model.addAttribute("error", e.getMessage());
+            return "find_user";
+        }
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
