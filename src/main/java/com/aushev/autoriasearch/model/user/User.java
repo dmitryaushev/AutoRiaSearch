@@ -12,6 +12,7 @@ import java.util.List;
 @Entity
 @Table(name = "users")
 @Component
+@UserExist
 public class User {
 
     private int id;
@@ -52,7 +53,6 @@ public class User {
     }
 
     @Email
-    @UserExist
     @NotEmpty
     public String getEmail() {
         return email;

@@ -28,6 +28,7 @@
             <i></i>
         </button>
         <div class="dropdown-content">
+            <a href="${pageContext.request.contextPath}/user/get">Details</a>
             <a href="${pageContext.request.contextPath}/search/history">Search history</a>
             <a href="${pageContext.request.contextPath}/logout">Logout</a>
         </div>
