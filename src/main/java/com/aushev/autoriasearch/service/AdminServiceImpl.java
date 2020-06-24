@@ -9,6 +9,8 @@ import com.aushev.autoriasearch.model.user.UserStatus;
 import com.aushev.autoriasearch.repository.SearchRepository;
 import com.aushev.autoriasearch.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,8 +34,8 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public List<User> findAllUsers() {
-        return userRepository.findAll();
+    public Page<User> findAllUsers(Pageable pageable) {
+        return userRepository.findAll(pageable);
     }
 
     @Override
@@ -60,13 +62,33 @@ public class AdminServiceImpl implements AdminService {
     public void deactivateUser(int id) {
         User user = userRepository.findById(id).get();
         if (user.getUserRole().equals(UserRole.ROLE_ADMIN)) {
-            if (userRepository.countByUserRole(UserRole.ROLE_ADMIN) < 2) {
-                throw new DeactivateAdminException("Остепенись, ты тут последий админ, без тебя будет сложно.");
-            }
+            checkAdmin();
+            user.setUserRole(UserRole.ROLE_USER);
         }
         user.setUserStatus(UserStatus.NOT_ACTIVE);
         searchRepository.deactivateMailing(id);
         userRepository.save(user);
+    }
+
+    @Override
+    public void switchRole(int id) {
+        User user = userRepository.findById(id).get();
+        if (user.getUserRole().equals(UserRole.ROLE_ADMIN)) {
+            checkAdmin();
+            user.setUserRole(UserRole.ROLE_USER);
+        } else {
+            if (user.getUserStatus().equals(UserStatus.NOT_ACTIVE)) {
+                user.setUserStatus(UserStatus.ACTIVE);
+            }
+            user.setUserRole(UserRole.ROLE_ADMIN);
+        }
+        userRepository.save(user);
+    }
+
+    private void checkAdmin() {
+        if (userRepository.countByUserRole(UserRole.ROLE_ADMIN) < 2) {
+            throw new DeactivateAdminException("Остепенись, ты тут последий админ, без тебя будет сложно.");
+        }
     }
 }
 

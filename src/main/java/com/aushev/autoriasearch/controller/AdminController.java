@@ -3,9 +3,13 @@ package com.aushev.autoriasearch.controller;
 import com.aushev.autoriasearch.exception.UserNotExistException;
 import com.aushev.autoriasearch.model.Config;
 import com.aushev.autoriasearch.model.user.NotActiveUsers;
+import com.aushev.autoriasearch.model.user.User;
 import com.aushev.autoriasearch.service.AdminService;
 import com.aushev.autoriasearch.service.MailService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,6 +23,9 @@ public class AdminController {
 
     private AdminService adminService;
     private MailService mailService;
+    
+    private static final String SORT_BY_ROLE = "userRole";
+    private static final String SORT_BY_STATUS = "userStatus";
 
     @Autowired
     public void setAdminService(AdminService adminService) {
@@ -65,8 +72,12 @@ public class AdminController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/showUsers")
-    public String showAllUsers(Model model) {
-        model.addAttribute("users", adminService.findAllUsers());
+    public String showAllUsers(@PageableDefault(sort = {SORT_BY_ROLE, SORT_BY_STATUS}) Pageable pageable, Model model) {
+        Page<User> users = adminService.findAllUsers(pageable);
+        model.addAttribute("users", users.toList());
+        model.addAttribute("current", pageable.getPageNumber() + 1);
+        model.addAttribute("prev", users.previousOrFirstPageable().getPageNumber());
+        model.addAttribute("next", users.nextOrLastPageable().getPageNumber());
         return "show_users";
     }
 
@@ -96,6 +107,13 @@ public class AdminController {
     @GetMapping("/deactivate")
     public String deactivateUser(@RequestParam("id") int id) {
         adminService.deactivateUser(id);
+        return "redirect:/admin/showUsers";
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping("/role")
+    public String switchRole(@RequestParam("id") int id) {
+        adminService.switchRole(id);
         return "redirect:/admin/showUsers";
     }
 

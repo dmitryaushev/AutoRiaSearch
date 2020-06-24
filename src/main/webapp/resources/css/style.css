@@ -120,3 +120,52 @@ body {
     background-color: red;
     color: white;
 }
+
+div#line1 span#a {
+    display:inline;
+}
+div#line1:hover span#a {
+    display:none;
+}
+div#line1 span#b {
+    display:none;
+}
+div#line1:hover span#b {
+    display:inline;
+}
+div#line2 span#c {
+    display:inline;
+}
+div#line2:hover span#c {
+    display:none;
+}
+div#line2 span#d {
+    display:none;
+}
+div#line2:hover span#d {
+    display:inline;
+}
+div#line3 span#e {
+    display:inline;
+}
+div#line3:hover span#e {
+    display:none;
+}
+div#line3 span#f {
+    display:none;
+}
+div#line3:hover span#f {
+    display:inline;
+}
+div#line4 span#g {
+    display:inline;
+}
+div#line4:hover span#g {
+    display:none;
+}
+div#line4 span#h {
+    display:none;
+}
+div#line4:hover span#h {
+    display:inline;
+}
