@@ -1,8 +1,10 @@
 package com.aushev.autoriasearch.service;
 
+import com.aushev.autoriasearch.exception.DeactivateAdminException;
 import com.aushev.autoriasearch.exception.UserNotExistException;
 import com.aushev.autoriasearch.model.user.NotActiveUsers;
 import com.aushev.autoriasearch.model.user.User;
+import com.aushev.autoriasearch.model.user.UserRole;
 import com.aushev.autoriasearch.model.user.UserStatus;
 import com.aushev.autoriasearch.repository.SearchRepository;
 import com.aushev.autoriasearch.repository.UserRepository;
@@ -57,6 +59,11 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public void deactivateUser(int id) {
         User user = userRepository.findById(id).get();
+        if (user.getUserRole().equals(UserRole.ROLE_ADMIN)) {
+            if (userRepository.countByUserRole(UserRole.ROLE_ADMIN) < 2) {
+                throw new DeactivateAdminException("Остепенись, ты тут последий админ, без тебя будет сложно.");
+            }
+        }
         user.setUserStatus(UserStatus.NOT_ACTIVE);
         searchRepository.deactivateMailing(id);
         userRepository.save(user);

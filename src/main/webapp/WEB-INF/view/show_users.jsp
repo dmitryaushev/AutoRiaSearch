@@ -34,6 +34,16 @@
                         </c:otherwise>
                     </c:choose>
                 </td>
+                <td>
+                    <c:choose>
+                        <c:when test="${user.userRole eq 'ROLE_ADMIN'}">
+
+                        </c:when>
+                        <c:otherwise>
+
+                        </c:otherwise>
+                    </c:choose>
+                </td>
             </tr>
         </c:forEach>
         </tbody>
