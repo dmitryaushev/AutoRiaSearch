@@ -17,7 +17,7 @@ public interface SearchService {
 
     void saveSearch(Search search, User user);
 
-    List<SearchDto> findSearchListByUser(User user, Pageable pageable);
+    List<SearchDto> findSearchListByUser(User user, Pageable pageable, Boolean mailing);
 
     Map<String, String> findLatestRecords(User user);
 

@@ -21,6 +21,8 @@ public interface SearchRepository extends JpaRepository<Search, Integer> {
 
     List<Search> findAllByUserAndMailing(User user, boolean mailing);
 
+    List<Search> findAllByUserAndMailing(User user, Pageable pageable, boolean mailing);
+
     @Modifying
     @Transactional
     @Query(value = "update search set mailing = false where user_id = :id", nativeQuery = true)

@@ -10,5 +10,4 @@ import java.util.Optional;
 public interface ConfigRepository extends JpaRepository<Config, Integer> {
 
     Optional<Config> findByTitle(String title);
-
 }

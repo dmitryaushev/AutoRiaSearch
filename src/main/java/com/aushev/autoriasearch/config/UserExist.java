@@ -11,6 +11,8 @@ import java.lang.annotation.*;
 public @interface UserExist {
 
     String message() default "User with this email already exist";
+
     Class<?>[] groups() default {};
+
     Class<? extends Payload>[] payload() default {};
 }

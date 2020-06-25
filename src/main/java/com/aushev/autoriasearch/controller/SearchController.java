@@ -69,10 +69,11 @@ public class SearchController {
 
     @GetMapping("/history")
     public String showHistory(Authentication authentication, Model model,
+                              @RequestParam(value = "mailing", required = false) Boolean mailing,
                               @PageableDefault(size = COUNT, sort = SORT, direction = Sort.Direction.DESC)
                                       Pageable pageable) {
         model.addAttribute("searchList",
-                searchService.findSearchListByUser(getUser(authentication), pageable));
+                searchService.findSearchListByUser(getUser(authentication), pageable, mailing));
         model.addAttribute("current", pageable.getPageNumber() + 1);
         model.addAttribute("prev", pageable.previousOrFirst().getPageNumber());
         model.addAttribute("next", pageable.next().getPageNumber());

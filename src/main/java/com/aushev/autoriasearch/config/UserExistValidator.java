@@ -10,27 +10,27 @@ import java.util.Objects;
 
 public class UserExistValidator implements ConstraintValidator<UserExist, User> {
 
-   private UserService userService;
+    private UserService userService;
 
-   @Autowired
-   public void setUserService(UserService userService) {
-      this.userService = userService;
-   }
+    @Autowired
+    public void setUserService(UserService userService) {
+        this.userService = userService;
+    }
 
-   public void initialize(UserExist constraint) {
-   }
+    public void initialize(UserExist constraint) {
+    }
 
-   public boolean isValid(User user, ConstraintValidatorContext context) {
+    public boolean isValid(User user, ConstraintValidatorContext context) {
 
-      User existUser = userService.userExist(user.getEmail());
-      if (Objects.isNull(existUser)) {
-         return true;
-      }
-      if (user.getId() != existUser.getId()) {
-         context.buildConstraintViolationWithTemplate(context.getDefaultConstraintMessageTemplate())
-                 .addPropertyNode("email").addConstraintViolation();
-         return false;
-      }
-      return true;
-   }
+        User existUser = userService.userExist(user.getEmail());
+        if (Objects.isNull(existUser)) {
+            return true;
+        }
+        if (user.getId() != existUser.getId()) {
+            context.buildConstraintViolationWithTemplate(context.getDefaultConstraintMessageTemplate())
+                    .addPropertyNode("email").addConstraintViolation();
+            return false;
+        }
+        return true;
+    }
 }

@@ -28,7 +28,18 @@
             <th>Цена до</th>
             <th>Валюта</th>
             <th>Дата</th>
-            <th>Рассылка</th>
+            <form method="get" action="history">
+                <th>
+                    <select name="mailing">
+                        <option value="">Все</option>
+                        <option value="true">С рассылкой</option>
+                        <option value="false">Без рассылки</option>
+                    </select>
+                </th>
+                <th>
+                    <button type="submit" class="button">Show</button>
+                </th>
+            </form>
         </thead>
         <tbody>
         <c:forEach items="${searchList}" var="search">

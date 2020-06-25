@@ -68,8 +68,15 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
-    public List<SearchDto> findSearchListByUser(User user, Pageable pageable) {
-        List<Search> searchList = searchRepository.findAllByUser(user, pageable);
+    public List<SearchDto> findSearchListByUser(User user, Pageable pageable, Boolean mailing) {
+        List<Search> searchList;
+        if (Objects.isNull(mailing)) {
+            searchList = searchRepository.findAllByUser(user, pageable);
+        } else if (mailing) {
+            searchList = searchRepository.findAllByUserAndMailing(user, pageable, true);
+        } else {
+            searchList = searchRepository.findAllByUserAndMailing(user, pageable, false);
+        }
         List<SearchDto> searchDtoList = new ArrayList<>();
         searchList.forEach(search -> searchDtoList.add(mapper.toDto(search)));
         return searchDtoList;

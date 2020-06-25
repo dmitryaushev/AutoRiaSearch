@@ -23,7 +23,7 @@ public class AdminController {
 
     private AdminService adminService;
     private MailService mailService;
-    
+
     private static final String SORT_BY_ROLE = "userRole";
     private static final String SORT_BY_STATUS = "userStatus";
 
